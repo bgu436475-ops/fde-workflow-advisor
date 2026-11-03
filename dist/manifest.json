@@ -1,0 +1,20 @@
+{
+  "format": "agent-skill",
+  "name": "diagnose-fde-workflow",
+  "version": "0.2.0",
+  "root": "diagnose-fde-workflow/",
+  "required_external_services": [],
+  "python_for_enhanced_outputs": ">=3.9",
+  "archive_sha256": "3977cfda94e5a1094927d6f750e42bb1c395c928ac482d3c474be46fb26c231b",
+  "files": {
+    "SKILL.md": "d467fcc99acca985d82589cb7537ff2d05f8b2a10796061c27c3961cfab0c711",
+    "agents/openai.yaml": "01fb1fe39118207ce18c2e8ba2763ef329ecb671e984e2763e7f7dc48e92062f",
+    "assets/icon.svg": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
+    "assets/quotation-example.json": "6076026963fd010e0d349ead2089588e63486d0f48cd6c1c9d33c7df4478f062",
+    "references/diagnosis.md": "27ede9fb3acb19ca2911625b6829825316e802c1e0ce23c39727a26dd7a85220",
+    "references/measurement.md": "c876846fb14fd347d58b0f8019850e6b6f20a487def698ad14568ebee469e3cf",
+    "references/model-contract.md": "32ebcc8be4bc49747430f55aa0995df1475b7a753a84ec8a573cbb84164c3a10",
+    "scripts/quickstart.py": "5aa2538a2a66f392ae253093fea6860501b4980e337076726a3bff45e5e379d2",
+    "scripts/workflow.py": "6d0695a69ffd814d297426a039fe16834c0e936ef0a00c0de72033a4bef579ae"
+  }
+}
