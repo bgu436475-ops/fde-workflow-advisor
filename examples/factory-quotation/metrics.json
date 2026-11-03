@@ -1,0 +1,16 @@
+{
+  "available": true,
+  "status": "hypothetical",
+  "source_note": "全部演示假设，非实测：相同边界最终完成报价40单/日、22工作日/月；6和12分钟已含审核常规纠错，另加维护20/40=0.5分钟/单；取消和未完成另计",
+  "before_min": 18.0,
+  "after_min": 8.9,
+  "saved_min_per_case": 9.1,
+  "labor_reduction_pct": 50.55555555555556,
+  "released_hours_per_day": 6.066666666666666,
+  "released_hours_per_month": 133.46666666666667,
+  "excluded_costs": [
+    "一次性建设、软件和API费用、罕见事故返工未计入；维护与常规审核纠错已计入",
+    "等待客户补料和队列属于周期，不是人工工时"
+  ],
+  "limit": "仅为合计人工工时；不等于现金节省、裁员、周期提升或营收增长"
+}

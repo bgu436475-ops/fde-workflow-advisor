@@ -1,0 +1,13 @@
+interface:
+  display_name: 流程改造顾问
+  short_description: 拆解业务流程，评估 AI 与自动化机会，生成改造方案和场景演示
+  default_prompt: 使用 $diagnose-fde-workflow 分析我的业务流程，找出值得改造的环节，给出最小试点和前后场景图。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

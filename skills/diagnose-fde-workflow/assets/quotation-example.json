@@ -1,0 +1,334 @@
+{
+  "title": "工厂询价改造前后场景演示",
+  "goal": "减少重复整理和发现缺项过晚带来的返工；先验证标准件报价准备",
+  "scope": "从接收询价到销售审核发送报价；仅演示规则明确的一类产品",
+  "case": "演示 Q001：A 型产品 100 件，初始缺少尺寸；前后为同一需求与交付标准",
+  "decision": "pilot",
+  "evidence": [
+    {
+      "id": "e1",
+      "status": "hypothetical",
+      "note": "人为构造的演示案例，不是客户访谈或已上线系统"
+    },
+    {
+      "id": "e2",
+      "status": "hypothetical",
+      "note": "演示参数：常规件占 80%，所有角色工时按假设汇总，未采样核验"
+    }
+  ],
+  "before": [
+    {
+      "id": "b1",
+      "actor": "销售",
+      "action": "接收并手动登记询价",
+      "input": "Q001 消息及图片",
+      "output": "初始询价记录",
+      "mode": "human",
+      "next": [
+        {
+          "to": "b2",
+          "condition": "登记完成",
+          "exception": false
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "b2",
+      "actor": "技术",
+      "action": "检查规格并查历史资料",
+      "input": "初始询价记录",
+      "output": "缺尺寸或可报价资料",
+      "mode": "human",
+      "next": [
+        {
+          "to": "b3",
+          "condition": "缺少尺寸",
+          "exception": true
+        },
+        {
+          "to": "b4",
+          "condition": "信息完整",
+          "exception": false
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "b3",
+      "actor": "销售",
+      "action": "向客户补问尺寸",
+      "input": "缺项清单",
+      "output": "补齐的规格或人工关闭",
+      "mode": "human",
+      "next": [
+        {
+          "to": "b2",
+          "condition": "客户补齐",
+          "exception": false
+        },
+        {
+          "to": "b5",
+          "condition": "客户取消或长期无回复，人工结案",
+          "exception": true
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "b4",
+      "actor": "技术与销售",
+      "action": "技术准备报价，销售审核发送",
+      "input": "完整规格与有效报价依据",
+      "output": "发送的报价及登记结果",
+      "mode": "human",
+      "next": [],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "b5",
+      "actor": "销售",
+      "action": "关闭未完成询价",
+      "input": "取消或无回复的询价",
+      "output": "结案记录",
+      "mode": "human",
+      "next": [],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    }
+  ],
+  "after": [
+    {
+      "id": "a1",
+      "actor": "系统与销售",
+      "action": "提取需求并校验必填字段",
+      "input": "同一份 Q001 消息及图片",
+      "output": "结构化规格及缺项标记",
+      "mode": "ai",
+      "next": [
+        {
+          "to": "a2",
+          "condition": "缺少尺寸或提取不确定",
+          "exception": true
+        },
+        {
+          "to": "a3",
+          "condition": "字段齐全且已核对",
+          "exception": false
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "a2",
+      "actor": "销售",
+      "action": "补问尺寸并核对提取结果",
+      "input": "原文和缺项标记",
+      "output": "补齐规格或人工关闭",
+      "mode": "human",
+      "next": [
+        {
+          "to": "a1",
+          "condition": "收到补充并重新校验",
+          "exception": false
+        },
+        {
+          "to": "a6",
+          "condition": "客户取消或长期无回复，人工结案",
+          "exception": true
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "a3",
+      "actor": "规则系统",
+      "action": "按有效规则准备报价草稿",
+      "input": "完整规格与价格规则",
+      "output": "带依据版本的报价草稿或例外",
+      "mode": "rules",
+      "next": [
+        {
+          "to": "a5",
+          "condition": "规则可用且属于标准件",
+          "exception": false
+        },
+        {
+          "to": "a4",
+          "condition": "非标、规则冲突或读取失败",
+          "exception": true
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "a4",
+      "actor": "技术",
+      "action": "处理例外并准备报价",
+      "input": "原始需求及失败记录",
+      "output": "人工确认的报价依据",
+      "mode": "human",
+      "next": [
+        {
+          "to": "a5",
+          "condition": "专业评估完成",
+          "exception": false
+        },
+        {
+          "to": "a6",
+          "condition": "无法提供可靠报价，人工结案",
+          "exception": true
+        }
+      ],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "a5",
+      "actor": "销售",
+      "action": "审核并发送报价，记录版本",
+      "input": "报价草稿及依据",
+      "output": "发送的报价与可追踪记录",
+      "mode": "human",
+      "next": [],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "a6",
+      "actor": "销售",
+      "action": "关闭无法完成的询价",
+      "input": "取消、无回复或无法报价原因",
+      "output": "结案记录",
+      "mode": "human",
+      "next": [],
+      "basis": "hypothetical",
+      "evidence_refs": [
+        "e1"
+      ]
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "o1",
+      "step_ids": [
+        "b1",
+        "b2",
+        "a1",
+        "a2"
+      ],
+      "type": "ai_assist",
+      "reason": "前移发现规格缺项，减少手工整理和回头补问",
+      "prerequisites": "消息或表单可授权读取，字段明确且可回看原文；提取效果需实测",
+      "owner": "销售，具体人员待确认",
+      "acceptance": "按真实样本核验字段及异常，质量门槛由业务负责人确认",
+      "evidence_refs": [
+        "e1"
+      ]
+    },
+    {
+      "id": "o2",
+      "step_ids": [
+        "b4",
+        "a3",
+        "a4",
+        "a5"
+      ],
+      "type": "human_in_loop",
+      "reason": "标准件按有效规则准备草稿，技术处理例外，销售确认最终承诺",
+      "prerequisites": "产品主数据和有效价格规则具备，规则有版本；未具备则先补基础",
+      "owner": "技术与销售，具体人员待确认",
+      "acceptance": "对比同类报价的合计人工工时、正确性及转人工负担",
+      "evidence_refs": [
+        "e1",
+        "e2"
+      ]
+    }
+  ],
+  "self_checks": [
+    {
+      "failure": "标准件比例低于演示假设，或技术纠错抵消节省",
+      "verify": "统计有代表性的订单，并记录审核、纠错和维护工时",
+      "response": "重算收益，缩小到规则明确类别，必要时先统一表单"
+    },
+    {
+      "failure": "历史报价过期或当前价格规则无法读取",
+      "verify": "核对规则的有效期、版本与来源权限",
+      "response": "停止自动准备价格，转技术人工；历史资料只作参考"
+    }
+  ],
+  "rollout": {
+    "scope": "先选一类标准产品，不直接替代正式业务",
+    "samples": "历史样本数量待确定；覆盖正常、缺项、非标、读取失败、重复提交与取消",
+    "baseline": "先记录现有人工耗时、端到端周期与返工，再影子运行",
+    "owner": "业务负责人待确认",
+    "reviewer": "销售审核，技术处理例外；具体人员待确认",
+    "maintainer": "规则与连接维护人待确认",
+    "gates": "字段和报价质量门槛由业务方按错误后果确认",
+    "stop": "质量不达门槛、纠错抵消收益、来源不稳定或重复发送风险时暂停",
+    "fallback": "保留原文、记录与版本，交回销售和技术人工流程"
+  },
+  "unknowns": [
+    "实际业务量、标准件占比及人员工时未采集",
+    "数据权限、现有规则及维护成本未验证",
+    "客户补料等待与取消未完成业务不纳入本次工时演示；真实分析需另行分组"
+  ],
+  "questions": [],
+  "metrics": {
+    "status": "hypothetical",
+    "source_note": "演示假设：只比较最终完成报价且范围相同的询价，非客户实测",
+    "unit": "labor_minutes_per_case",
+    "comparable_scope": true,
+    "routes": [
+      {
+        "name": "常规件",
+        "weight": 0.8,
+        "before_min": 20,
+        "after_min": 6,
+        "before_extra_min": 0,
+        "after_extra_min": 0
+      },
+      {
+        "name": "非标件",
+        "weight": 0.2,
+        "before_min": 20,
+        "after_min": 14,
+        "before_extra_min": 0,
+        "after_extra_min": 0
+      }
+    ],
+    "excluded_costs": [
+      "维护工时、额外返工、调用软件费用尚未计入",
+      "等待客户补料和队列属于周期，不是人工工时"
+    ],
+    "cases_per_day": 100,
+    "working_days_per_month": 20
+  }
+}
