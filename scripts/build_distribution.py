@@ -33,7 +33,7 @@ def main():
               + body + '\n\n# 已内嵌的参考规则\n\n' + '\n\n'.join(extra))
     (DIST / 'workflow-advisor-prompt.md').write_text(prompt, encoding='utf-8')
     manifest = {'format': 'agent-skill', 'name': 'diagnose-fde-workflow',
-                'version': '0.2.0', 'root': 'diagnose-fde-workflow/',
+                'version': '0.3.0', 'root': 'diagnose-fde-workflow/',
                 'required_external_services': [], 'python_for_enhanced_outputs': '>=3.9',
                 'archive_sha256': hashlib.sha256(archive.read_bytes()).hexdigest(),
                 'files': {p.relative_to(SKILL).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}}

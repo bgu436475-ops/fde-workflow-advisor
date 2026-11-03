@@ -32,9 +32,10 @@ def main():
         (dest / 'metrics.json').write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False), encoding='utf-8')
         workflow.render(model, dest / 'scene.html')
         workflow.storyboard(model, dest / 'storyboard.md')
+        workflow.visuals(model, dest / 'visuals.md')
         print(json.dumps({'valid': True, 'demo': args.model is None,
                           'output': str(dest), 'metrics': result,
-                          'files': ['workflow.json', 'metrics.json', 'scene.html', 'scene.svg', 'storyboard.md']},
+                          'files': ['workflow.json', 'metrics.json', 'scene.html', 'scene.svg', 'storyboard.md', 'visuals.md']},
                          ensure_ascii=False, indent=2, allow_nan=False))
         return 0
     except (OSError, ValueError, TypeError, KeyError) as exc:

@@ -272,9 +272,72 @@ def storyboard(m, output):
     output=Path(output);output.parent.mkdir(parents=True,exist_ok=True);output.write_text('\n'.join(out),encoding='utf-8')
 
 
+def visuals(m, output):
+    def actions(side):
+        return '\n'.join(f'- [{n["id"]}] {n["actor"]}：{n["action"]}；交付：{n["output"]}'
+                         for n in m[side]) or '该侧流程待确认或暂缓，不编造活动。'
+    exceptions = [f'- [{n["id"]} → {e["to"]}] {e["condition"]}'
+                  for n in m['after'] for e in n['next'] if e['exception']]
+    result = calculate(m)
+    if result['available']:
+        metric = (f'{STATUS_LABEL[result["status"]]}：每单合计人工 '
+                  f'{result["before_min"]:.2f} → {result["after_min"]:.2f} 分钟。\n'
+                  f'来源：{result["source_note"]}\n限制：{result["limit"]}\n'
+                  f'未计入：{"；".join(result["excluded_costs"])}')
+    else:
+        metric = result['reason'] + '；不生成虚构收益字幕。'
+    source = '\n'.join(f'- {e["id"]} · {STATUS_LABEL[e["status"]]}：{e["note"]}' for e in m['evidence'])
+    text = f'''# {m['title']} · AIGC 场景制作稿
+
+状态：制作提示词，尚未生成插画或视频。模型结构已校验，业务事实须另核实。
+
+## 可复制的图像提示词
+
+用途：向非技术业务负责人解释流程变化的叙事插画，不是精确流程图或软件截图。
+目标：{m['goal']}
+同一案例：{m['case']}
+起止范围：{m['scope']}
+构图：左右对照，每侧三幕；同一需求进入、角色处理、交付与异常去向。
+人物：保持前后角色、服装和场地一致，人仍承担例外与确认。
+
+改造前可参考的动作（不是固定执行顺序，条件边以原模型为准）：
+{actions('before')}
+
+改造后可参考的动作：
+{actions('after')}
+
+必须保留的人工接手与异常：
+{chr(10).join(exceptions) or '模型未明确异常，先标待确认，不编造零异常。'}
+
+风格：清晰、易读的商业叙事插画。每格只表现一个动作，短标题而非密集文字。
+角落固定标注“方案示意，非实测”。不用现金、裁员或飞驰货车暗示未经验证的收益。
+不要绘制复杂控制流或精确数据图表。未知事实保留待确认；减少人工操作不等于实物更快交付。
+暂缓或待补充的方案不能画成已经运行。不要使用真实个人身份、订单或凭证。
+
+## 后期字幕（不要求生成式画面承载）
+
+{metric}
+
+## 来源与待确认
+
+{source}
+
+待确认：{'；'.join(m['unknowns']) or '请核对来源是否充分。'}
+
+## 视频扩展
+
+从同一案例生成分镜，先原流程后新流程，保留例外和同一交付标准。
+使用 storyboard 命令生成基础60秒分镜；有实际视频能力时再制作。
+没有真实视频文件，不宣称成片已完成。
+'''
+    output = Path(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(text, encoding='utf-8')
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command',choices=('validate','calculate','render','storyboard'))
+    parser.add_argument('command',choices=('validate','calculate','render','storyboard','visuals'))
     parser.add_argument('model',type=Path);parser.add_argument('--output',type=Path)
     args=parser.parse_args()
     try:
@@ -285,9 +348,10 @@ def main():
         if args.command=='validate': print(json.dumps({'valid':True},ensure_ascii=False));return 0
         if args.command=='calculate':
             print(json.dumps(calculate(m),ensure_ascii=False,indent=2,allow_nan=False));return 0
-        if args.output is None: parser.error('render 与 storyboard 必须提供 --output')
+        if args.output is None: parser.error('render、storyboard 与 visuals 必须提供 --output')
         if args.command=='render': render(m,args.output)
-        else: storyboard(m,args.output)
+        elif args.command=='storyboard': storyboard(m,args.output)
+        else: visuals(m,args.output)
         print(str(args.output.resolve()));return 0
     except (OSError,ValueError,TypeError,KeyError) as exc:
         print(json.dumps({'valid':False,'errors':[str(exc)]},ensure_ascii=False));return 2

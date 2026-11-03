@@ -28,6 +28,7 @@ def main():
                 assert z.read(name) == (ROOT / 'skills/diagnose-fde-workflow' / rel).read_bytes()
             z.extractall(tmp)
         count += 1
+
         skill = tmp / 'diagnose-fde-workflow'
         assert (skill / 'SKILL.md').is_file()
         count += 1
@@ -47,6 +48,12 @@ def main():
         assert '尚未生成' in (dest / 'storyboard.md').read_text(encoding='utf-8')
         count += 1
 
+        visual = (dest / 'visuals.md').read_text(encoding='utf-8')
+        assert '尚未生成插画或视频' in visual
+        assert '[b1]' in visual and '[a1]' in visual
+        assert '模拟' in visual or '演示' in visual
+        count += 1
+
         before = (dest / 'scene.html').read_bytes()
         code, result = run('--output', dest)
         assert code == 2 and not result['valid'] and (dest / 'scene.html').read_bytes() == before
@@ -61,6 +68,7 @@ def main():
         custom.write_text(json.dumps(model, ensure_ascii=False), encoding='utf-8')
         code, result = run('--model', custom, '--output', tmp / 'unknown output')
         assert code == 0 and not result['demo'] and not result['metrics']['available']
+        assert '不生成虚构收益字幕' in (tmp / 'unknown output' / 'visuals.md').read_text(encoding='utf-8')
         count += 1
 
         model = json.loads((skill / 'assets/quotation-example.json').read_text(encoding='utf-8'))
@@ -78,7 +86,7 @@ def main():
                       'checks': ['archive checksum', 'resource and source parity', 'entry point',
                                  'offline fresh-path execution with spaces', 'no overwrite',
                                  'no customer output in installed skill', 'missing metrics',
-                                 'invalid model', 'missing input']}, ensure_ascii=False, indent=2))
+                                 'invalid model', 'missing input', 'visual instructions and source IDs']}, ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':

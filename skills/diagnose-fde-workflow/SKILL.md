@@ -49,6 +49,7 @@ python3 <skill-dir>/scripts/workflow.py validate <work-dir>/workflow.json
 python3 <skill-dir>/scripts/workflow.py calculate <work-dir>/workflow.json
 python3 <skill-dir>/scripts/workflow.py render <work-dir>/workflow.json --output <work-dir>/场景对照.html
 python3 <skill-dir>/scripts/workflow.py storyboard <work-dir>/workflow.json --output <work-dir>/视频分镜.md
+python3 <skill-dir>/scripts/workflow.py visuals <work-dir>/workflow.json --output <work-dir>/AIGC场景制作稿.md
 ```
 
 先修复 validate 错误再渲染；脚本只校验结构与数值，不证明事实。参考 [询价演示模型](assets/quotation-example.json) 的结构，不把演示数字、规则和角色移植到客户案例。首次运行可用 `python3 <skill-dir>/scripts/quickstart.py --output <work-dir>` 生成纯演示，切勿把演示当作客户分析。
@@ -68,6 +69,14 @@ python3 <skill-dir>/scripts/workflow.py storyboard <work-dir>/workflow.json --ou
 用同一笔业务、相同起止边界及交付标准对照，画出例外和人工接手。额外支路标为扩展情形；未知节点标待确认，不伪造实际动作。
 
 用户要求视频时先生成分镜，再检查视频或动画导出能力。优先确定性流程动画、字幕与旁白。仅有分镜时明确成片尚未生成，不将 HTML、浏览器动画或分镜称为视频，也不自动触发额外付费服务。
+
+## AIGC 场景呈现（按需）
+
+用户想更直观、做场景插画或用 AIGC 讲解时，启用此模块。能读文件时读取 [场景制作规则](references/visual-storytelling.md)。先从同一案例提取角色、地点、输入、动作、交接和真实改变，再做前后情景对照；不是把原流程图重新美化。
+
+默认先做一张前后分镜式场景插画，让非技术业务方看到谁少做了哪些动作、异常谁来接手。插画不能代替精确流程与数据；不把缺货画成已发货，不把工时容量画成已裁员或营收上涨。图中演示需醒目标注；精确数字与复杂文字留在报告或确定性字幕中。
+
+宿主有图像生成能力且当前请求包含生成画面时，按其规则直接生成；无图像能力就给可复制提示词与分镜，不要求作者账号或强制插件，不冒充已生成图片。Python 模式可用 visuals 命令从同一模型生成制作稿。视频另核实可用能力与所需授权；没有成片时明确交付的是分镜。检查角色一致、正常/异常路径、事实与数值，不通过就修订或降级到文字场景。
 
 ## 交付与完成标准
 
