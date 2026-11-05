@@ -1,21 +1,23 @@
 {
   "format": "agent-skill",
   "name": "diagnose-fde-workflow",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "root": "diagnose-fde-workflow/",
   "required_external_services": [],
   "python_for_enhanced_outputs": ">=3.9",
-  "archive_sha256": "7880ed8d8a109f6f64bc92c2186e55e6864e8992987a7b0ba824548dc2bfe66b",
+  "archive_sha256": "9b0a1d6a83b6cfc59164e0838ff42051adbda3cda7bacc6f237bb4a8b1697e87",
   "files": {
-    "SKILL.md": "a679bd2376fbb260b02f640d038eddbb0693fca1dc9d997bee9d3118a99ebca5",
+    "SKILL.md": "362ac87bd71d1cca22d71d0dd6dfe2e15749e871d5d7c2e3306ca46d068b80b6",
     "agents/openai.yaml": "01fb1fe39118207ce18c2e8ba2763ef329ecb671e984e2763e7f7dc48e92062f",
     "assets/icon.svg": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
     "assets/quotation-example.json": "6076026963fd010e0d349ead2089588e63486d0f48cd6c1c9d33c7df4478f062",
     "references/diagnosis.md": "27ede9fb3acb19ca2911625b6829825316e802c1e0ce23c39727a26dd7a85220",
+    "references/h3-video.md": "2f7aa7ab7d336e010cd3498a12f6620ef17d90d8fff3d1ef9bb6bbc44ddadbe9",
     "references/measurement.md": "c876846fb14fd347d58b0f8019850e6b6f20a487def698ad14568ebee469e3cf",
     "references/model-contract.md": "32ebcc8be4bc49747430f55aa0995df1475b7a753a84ec8a573cbb84164c3a10",
     "references/visual-storytelling.md": "9a6e53a7b9a705ce6b46b5540af48f561241ebbc2d757fd69a946926edfc66ce",
     "scripts/quickstart.py": "c0aa635636d38b4b0f5303ad790eb29843c36dbd0c2a5151810f7ce8ccee26bf",
+    "scripts/video_h3.py": "530f5f3d4bf22eed20ae9148438f124fc9ec2190641a83adc49a8f904578a3c5",
     "scripts/workflow.py": "6c4a8e91b3b2d2572b7b5c399669d5ba9277b96927e8ca2e4c34d16cbc50a96d"
   }
 }

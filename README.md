@@ -85,7 +85,24 @@ python3 skills/diagnose-fde-workflow/scripts/workflow.py visuals examples/factor
 
 > 用 AIGC 把刚才的改造方案做成一张前后场景对照插画，展示相同一笔业务，并保留异常人工接手。
 
-图像与视频生成能力由所用 AI 工具提供，不包含在这个纯文件技能包里。
+图像与视频生成服务由宿主或使用者单独配置；技能包不附带服务额度。
+
+### 可选：接入自己的 H3 视频 API
+
+0.4.0 增加 H3 异步视频适配器，只使用 Python 标准库。普通流程诊断仍然不需要 API 或作者账号。由宿主秘密环境配置 `H3_BASE_URL`、`H3_API_KEY`，不要把密钥写进提示词、公开仓库或前端。
+
+```bash
+python3 skills/diagnose-fde-workflow/scripts/video_h3.py models
+python3 skills/diagnose-fde-workflow/scripts/video_h3.py create --prompt-file ./video-prompt.txt --seconds 4 --size 1280x720 --output ./video-receipt.json
+python3 skills/diagnose-fde-workflow/scripts/video_h3.py status <回执中的任务编号>
+python3 skills/diagnose-fde-workflow/scripts/video_h3.py download <回执中的任务编号> --output ./video.mp4
+```
+
+提交成功后保存回执，查询同一任务；排队和超时不自动重提。已实际验证模型列表、4 秒文生视频提交和排队查询；成片下载需等任务完成后继续验证。首帧、参考图等模型的输入参数尚未实测，不能从模型名称推断已经接入。
+
+[查看电商网页演示](https://flowshift-ecommerce-demo.alight-titan-8667.chatgpt.site/)：无需登录查看，视频排队时显示状态，完成后提供播放器与下载。网页仅查看配置好的样片，不向匿名访客开放生成额度。每位安装者使用自己的 API，作者密钥不随技能分发。
+
+详细步骤见 [H3 接入说明](skills/diagnose-fde-workflow/references/h3-video.md)。
 
 ## 安装后验收
 
